@@ -41,6 +41,8 @@ from .const import (
     CONF_TARGET_TEMP_SCALE,
     CONF_VIRTUAL_COUNT,
     DEFAULT_HUB,
+    DEFAULT_OFFSET,
+    DEFAULT_SCALE,
     DEFAULT_SCAN_INTERVAL,
     MODBUS_DOMAIN as DOMAIN,
     PLATFORMS,
@@ -254,50 +256,50 @@ def ensure_and_check_duplicate_scales_and_offsets(config: dict[str, Any]) -> dic
 
     if (
         config[CONF_TARGET_TEMP_SCALE] != config[CONF_SCALE]
-        and config[CONF_SCALE] != 1
-        and config[CONF_TARGET_TEMP_SCALE] != 1
+        and config[CONF_SCALE] != DEFAULT_SCALE
+        and config[CONF_TARGET_TEMP_SCALE] != DEFAULT_SCALE
     ):
         raise vol.Invalid(
             f"Invalid scales: {CONF_SCALE} and {CONF_TARGET_TEMP_SCALE} cannot be used together, please use only one of them."
         )
 
-    if config[CONF_SCALE] != 1:
+    if config[CONF_SCALE] != DEFAULT_SCALE:
         config[CONF_TARGET_TEMP_SCALE] = config[CONF_SCALE]
 
     if (
         config[CONF_CURRENT_TEMP_SCALE] != config[CONF_SCALE]
-        and config[CONF_SCALE] != 1
-        and config[CONF_CURRENT_TEMP_SCALE] != 1
+        and config[CONF_SCALE] != DEFAULT_SCALE
+        and config[CONF_CURRENT_TEMP_SCALE] != DEFAULT_SCALE
     ):
         raise vol.Invalid(
             f"Invalid scales: {CONF_SCALE} and {CONF_CURRENT_TEMP_SCALE} cannot be used together, please use only one of them."
         )
 
-    if config[CONF_SCALE] != 1:
-        config[CONF_TARGET_TEMP_OFFSET] = config[CONF_SCALE]
+    if config[CONF_SCALE] != DEFAULT_SCALE:
+        config[CONF_CURRENT_TEMP_SCALE] = config[CONF_SCALE]
 
     if (
         config[CONF_TARGET_TEMP_OFFSET] != config[CONF_OFFSET]
-        and config[CONF_OFFSET] != 0
-        and config[CONF_TARGET_TEMP_OFFSET] != 0
+        and config[CONF_OFFSET] != DEFAULT_OFFSET
+        and config[CONF_TARGET_TEMP_OFFSET] != DEFAULT_OFFSET
     ):
         raise vol.Invalid(
             f"Invalid scales: {CONF_OFFSET} and {CONF_TARGET_TEMP_OFFSET} cannot be used together, please use only one of them."
         )
 
-    if config[CONF_OFFSET] != 0:
+    if config[CONF_OFFSET] != DEFAULT_OFFSET:
         config[CONF_CURRENT_TEMP_OFFSET] = config[CONF_OFFSET]
 
     if (
         config[CONF_CURRENT_TEMP_OFFSET] != config[CONF_OFFSET]
-        and config[CONF_OFFSET] != 0
-        and config[CONF_CURRENT_TEMP_OFFSET] != 0
+        and config[CONF_OFFSET] != DEFAULT_OFFSET
+        and config[CONF_CURRENT_TEMP_OFFSET] != DEFAULT_OFFSET
     ):
         raise vol.Invalid(
             f"Invalid scales: {CONF_OFFSET} and {CONF_CURRENT_TEMP_OFFSET} cannot be used together, please use only one of them."
         )
 
-    if config[CONF_OFFSET] != 0:
+    if config[CONF_OFFSET] != DEFAULT_OFFSET:
         config[CONF_CURRENT_TEMP_OFFSET] = config[CONF_OFFSET]
 
     return config
