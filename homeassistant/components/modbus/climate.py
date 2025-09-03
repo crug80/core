@@ -90,8 +90,6 @@ from .const import (
     CONF_INPUT_TYPE,
     CONF_MAX_TEMP,
     CONF_MIN_TEMP,
-    CONF_OFFSETS,
-    CONF_SCALES,
     CONF_STEP,
     CONF_SWING_MODE_REGISTER,
     CONF_SWING_MODE_SWING_BOTH,
@@ -172,10 +170,10 @@ class ModbusThermostat(BaseStructPlatform, RestoreEntity, ClimateEntity):
         self._attr_min_temp = config[CONF_MIN_TEMP]
         self._attr_max_temp = config[CONF_MAX_TEMP]
         self._attr_target_temperature_step = config[CONF_STEP]
-        self._current_temp_scale = config[CONF_SCALES][CONF_CURRENT_TEMP_SCALE]
-        self._current_temp_offset = config[CONF_OFFSETS][CONF_CURRENT_TEMP_OFFSET]
-        self._target_temp_scale = config[CONF_SCALES][CONF_TARGET_TEMP_SCALE]
-        self._target_temp_offset = config[CONF_OFFSETS][CONF_TARGET_TEMP_OFFSET]
+        self._current_temp_scale = config[CONF_CURRENT_TEMP_SCALE]
+        self._current_temp_offset = config[CONF_CURRENT_TEMP_OFFSET]
+        self._target_temp_scale = config[CONF_TARGET_TEMP_SCALE]
+        self._target_temp_offset = config[CONF_TARGET_TEMP_OFFSET]
 
         if CONF_HVAC_MODE_REGISTER in config:
             mode_config = config[CONF_HVAC_MODE_REGISTER]

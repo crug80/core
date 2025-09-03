@@ -113,11 +113,9 @@ from .const import (
     CONF_MIN_VALUE,
     CONF_MSG_WAIT,
     CONF_NAN_VALUE,
-    CONF_OFFSETS,
     CONF_PARITY,
     CONF_PRECISION,
     CONF_SCALE,
-    CONF_SCALES,
     CONF_SLAVE_COUNT,
     CONF_STATE_CLOSED,
     CONF_STATE_CLOSING,
@@ -280,22 +278,10 @@ CLIMATE_SCHEMA = vol.All(
             vol.Optional(CONF_TEMPERATURE_UNIT, default=DEFAULT_TEMP_UNIT): cv.string,
             vol.Exclusive(CONF_HVAC_ONOFF_COIL, "hvac_onoff_type"): cv.positive_int,
             vol.Exclusive(CONF_HVAC_ONOFF_REGISTER, "hvac_onoff_type"): cv.positive_int,
-            vol.Optional(CONF_SCALES): vol.Maybe(
-                vol.All(
-                    {
-                        vol.Optional(CONF_CURRENT_TEMP_SCALE): vol.Coerce(float),
-                        vol.Optional(CONF_TARGET_TEMP_SCALE): vol.Coerce(float),
-                    },
-                ),
-            ),
-            vol.Optional(CONF_OFFSETS): vol.Maybe(
-                vol.All(
-                    {
-                        vol.Optional(CONF_CURRENT_TEMP_OFFSET): vol.Coerce(float),
-                        vol.Optional(CONF_TARGET_TEMP_OFFSET): vol.Coerce(float),
-                    },
-                ),
-            ),
+            vol.Optional(CONF_CURRENT_TEMP_SCALE, default=1.0): vol.Coerce(float),
+            vol.Optional(CONF_TARGET_TEMP_SCALE, default=1.0): vol.Coerce(float),
+            vol.Optional(CONF_CURRENT_TEMP_OFFSET, default=0.0): vol.Coerce(float),
+            vol.Optional(CONF_TARGET_TEMP_OFFSET, default=0.0): vol.Coerce(float),
             vol.Optional(
                 CONF_HVAC_ON_VALUE, default=DEFAULT_HVAC_ON_VALUE
             ): cv.positive_int,
