@@ -288,7 +288,7 @@ def ensure_and_check_duplicate_scales_and_offsets(config: dict[str, Any]) -> dic
         )
 
     if config[CONF_OFFSET] != DEFAULT_OFFSET:
-        config[CONF_CURRENT_TEMP_OFFSET] = config[CONF_OFFSET]
+        config[CONF_TARGET_TEMP_OFFSET] = config[CONF_OFFSET]
 
     if (
         config[CONF_CURRENT_TEMP_OFFSET] != config[CONF_OFFSET]
