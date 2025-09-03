@@ -221,7 +221,12 @@ class BaseStructPlatform(BasePlatform, RestoreEntity):
             registers.reverse()
         return registers
 
-    def __process_raw_value(self, entry: float | str | bytes) -> str | None:
+    def __process_raw_value(
+        self,
+        entry: float | bytes,
+        scale: float = 1,
+        offset: float = 0,
+    ) -> str | None:
         """Process value from sensor with NaN handling, scaling, offset, min/max etc."""
         if self._nan_value and entry in (self._nan_value, -self._nan_value):
             return None
@@ -230,7 +235,7 @@ class BaseStructPlatform(BasePlatform, RestoreEntity):
         if entry != entry:  # noqa: PLR0124
             # NaN float detection replace with None
             return None
-        val: float | int = self._scale * entry + self._offset
+        val: float | int = scale * entry + offset
         if self._min_value is not None and val < self._min_value:
             val = self._min_value
         if self._max_value is not None and val > self._max_value:
@@ -241,7 +246,9 @@ class BaseStructPlatform(BasePlatform, RestoreEntity):
             return str(round(val))
         return f"{float(val):.{self._precision}f}"
 
-    def unpack_structure_result(self, registers: list[int]) -> str | None:
+    def unpack_structure_result(
+        self, registers: list[int], scale: float = 1, offset: float = 0
+    ) -> str | None:
         """Convert registers to proper result."""
 
         if self._swap:
@@ -265,15 +272,15 @@ class BaseStructPlatform(BasePlatform, RestoreEntity):
             # Apply scale, precision, limits to floats and ints
             v_result = []
             for entry in val:
-                v_temp = self.__process_raw_value(entry)
+                v_temp = self.__process_raw_value(entry, scale, offset)
                 if self._data_type != DataType.CUSTOM:
-                    v_result.append(str(v_temp))
+                    v_result.append(str(v_temp) if v_temp is not None else "None")
                 else:
                     v_result.append(str(v_temp) if v_temp is not None else "0")
             return ",".join(map(str, v_result))
 
         # Apply scale, precision, limits to floats and ints
-        return self.__process_raw_value(val[0])
+        return self.__process_raw_value(val[0], scale, offset)
 
 
 class BaseSwitch(BasePlatform, ToggleEntity, RestoreEntity):

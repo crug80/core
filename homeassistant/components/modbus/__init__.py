@@ -66,6 +66,8 @@ from .const import (
     CONF_BYTESIZE,
     CONF_CLIMATES,
     CONF_COLOR_TEMP_REGISTER,
+    CONF_CURRENT_TEMP_OFFSET,
+    CONF_CURRENT_TEMP_SCALE,
     CONF_DATA_TYPE,
     CONF_DEVICE_ADDRESS,
     CONF_FAN_MODE_AUTO,
@@ -111,9 +113,11 @@ from .const import (
     CONF_MIN_VALUE,
     CONF_MSG_WAIT,
     CONF_NAN_VALUE,
+    CONF_OFFSETS,
     CONF_PARITY,
     CONF_PRECISION,
     CONF_SCALE,
+    CONF_SCALES,
     CONF_SLAVE_COUNT,
     CONF_STATE_CLOSED,
     CONF_STATE_CLOSING,
@@ -137,6 +141,8 @@ from .const import (
     CONF_SWING_MODE_SWING_VERT,
     CONF_SWING_MODE_VALUES,
     CONF_TARGET_TEMP,
+    CONF_TARGET_TEMP_OFFSET,
+    CONF_TARGET_TEMP_SCALE,
     CONF_TARGET_TEMP_WRITE_REGISTERS,
     CONF_VERIFY,
     CONF_VIRTUAL_COUNT,
@@ -159,6 +165,7 @@ from .modbus import DATA_MODBUS_HUBS, ModbusHub, async_modbus_setup
 from .validators import (
     duplicate_fan_mode_validator,
     duplicate_swing_mode_validator,
+    ensure_and_check_duplicate_scales_and_offsets,
     hvac_fixedsize_reglist_validator,
     nan_validator,
     register_int_list_validator,
@@ -273,6 +280,22 @@ CLIMATE_SCHEMA = vol.All(
             vol.Optional(CONF_TEMPERATURE_UNIT, default=DEFAULT_TEMP_UNIT): cv.string,
             vol.Exclusive(CONF_HVAC_ONOFF_COIL, "hvac_onoff_type"): cv.positive_int,
             vol.Exclusive(CONF_HVAC_ONOFF_REGISTER, "hvac_onoff_type"): cv.positive_int,
+            vol.Optional(CONF_SCALES): vol.Maybe(
+                vol.All(
+                    {
+                        vol.Optional(CONF_CURRENT_TEMP_SCALE): vol.Coerce(float),
+                        vol.Optional(CONF_TARGET_TEMP_SCALE): vol.Coerce(float),
+                    },
+                ),
+            ),
+            vol.Optional(CONF_OFFSETS): vol.Maybe(
+                vol.All(
+                    {
+                        vol.Optional(CONF_CURRENT_TEMP_OFFSET): vol.Coerce(float),
+                        vol.Optional(CONF_TARGET_TEMP_OFFSET): vol.Coerce(float),
+                    },
+                ),
+            ),
             vol.Optional(
                 CONF_HVAC_ON_VALUE, default=DEFAULT_HVAC_ON_VALUE
             ): cv.positive_int,
@@ -385,6 +408,7 @@ CLIMATE_SCHEMA = vol.All(
             ),
         },
     ),
+    ensure_and_check_duplicate_scales_and_offsets,
 )
 
 COVERS_SCHEMA = BASE_COMPONENT_SCHEMA.extend(
