@@ -251,8 +251,8 @@ def duplicate_fan_mode_validator(config: dict[str, Any]) -> dict:
     return config
 
 
-def ensure_and_check_duplicate_scales_and_offsets(config: dict[str, Any]) -> dict:
-    """Check for duplicated scale values."""
+def ensure_and_check_conflicting_scales_and_offsets(config: dict[str, Any]) -> dict:
+    """Check for conflicts in scale/offset and ensure target/current temp scale/offset is set."""
 
     if (
         config[CONF_TARGET_TEMP_SCALE] != config[CONF_SCALE]

@@ -84,7 +84,7 @@ from homeassistant.components.modbus.validators import (
     check_config,
     duplicate_fan_mode_validator,
     duplicate_swing_mode_validator,
-    ensure_and_check_duplicate_scales_and_offsets,
+    ensure_and_check_conflicting_scales_and_offsets,
     hvac_fixedsize_reglist_validator,
     nan_validator,
     register_int_list_validator,
@@ -1498,8 +1498,8 @@ async def test_pb_service_write_no_slave(
         ),
     ],
 )
-async def test_ensure_and_check_duplicate_scales_and_offsets(do_config) -> None:
-    """Test ensure_and_check_duplicate_scales_and_offsets."""
+async def test_ensure_and_check_conflicting_scales_and_offsets(do_config) -> None:
+    """Test ensure_and_check_conflicting_scales_and_offsets."""
 
     with pytest.raises(vol.Invalid):
-        ensure_and_check_duplicate_scales_and_offsets(do_config[0])
+        ensure_and_check_conflicting_scales_and_offsets(do_config[0])

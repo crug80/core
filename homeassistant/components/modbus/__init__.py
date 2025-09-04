@@ -165,7 +165,7 @@ from .modbus import DATA_MODBUS_HUBS, ModbusHub, async_modbus_setup
 from .validators import (
     duplicate_fan_mode_validator,
     duplicate_swing_mode_validator,
-    ensure_and_check_duplicate_scales_and_offsets,
+    ensure_and_check_conflicting_scales_and_offsets,
     hvac_fixedsize_reglist_validator,
     nan_validator,
     register_int_list_validator,
@@ -404,7 +404,7 @@ CLIMATE_SCHEMA = vol.All(
             ),
         },
     ),
-    ensure_and_check_duplicate_scales_and_offsets,
+    ensure_and_check_conflicting_scales_and_offsets,
 )
 
 COVERS_SCHEMA = BASE_COMPONENT_SCHEMA.extend(
